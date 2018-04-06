@@ -85,8 +85,8 @@ endef
 # command to copy the binary file from its current location (in our case the build
 # directory) to the install directory.
 define Package/YeelightSer/install
-	$(INSTALL_DIR) 	$(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/YeelightSer $(1)/usr/sbin
+	$(INSTALL_DIR) 	$(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/YeelightSer $(1)/usr/bin
 	$(INSTALL_DIR) 	$(1)/etc/init.d
 	$(CP) $(PKG_BUILD_DIR)/sh/init.d/yeelightser $(1)/etc/init.d/
 	$(INSTALL_DIR) 	$(1)/etc/hotplug.d/iface
