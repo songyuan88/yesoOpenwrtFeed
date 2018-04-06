@@ -17,7 +17,7 @@
 //int8_t flag = 0;	/*0：nothing 1:退出*/
 #define LOCKMODE 0644	/* 创建掩码 */
 static const char *LOCK_FILE = "/var/run/YeelightSer.pid";	/* 锁文件 */
-extern char* DEMO_NAME;
+extern char* DEV_NAME;
 
 
 
@@ -31,7 +31,7 @@ void init_daemon(int exitflag){
 			setsid();
 			break;
 		case -1:
-			LOG_ERROR("%s start error！",DEMO_NAME);
+			LOG_ERROR("%s start error！",DEV_NAME);
 			exit(EXIT_FAILURE);
 			break;
 		default:
@@ -42,7 +42,7 @@ void init_daemon(int exitflag){
 
 	check_running(exitflag);	//注意,这个不能放在fork之前
 
-	LOG_TRACE("%s is started!",DEMO_NAME);
+	LOG_TRACE("%s is started!",DEV_NAME);
 
 //	chdir("/");
 //	int null_fd = open ("/dev/null", O_RDWR , 0);
@@ -84,22 +84,22 @@ void check_running(int exitflag){
 	if(exitflag){	//程序退出
 		if ( fl.l_type != F_UNLCK ) {
 			if ( kill ( fl.l_pid, SIGKILL ) == -1) {
-				LOG_ERROR("结束 %s 进程失败!",DEMO_NAME);
+				LOG_ERROR("结束 %s 进程失败!",DEV_NAME);
 			}else{
-				LOG_INFO("%s 进程(PID=%d)已经退出.",DEMO_NAME , fl.l_pid);
+				LOG_INFO("%s 进程(PID=%d)已经退出.",DEV_NAME , fl.l_pid);
 			}
 		}else{
-			LOG_INFO("当前没有 %s 进程正在运行",DEMO_NAME);
+			LOG_INFO("当前没有 %s 进程正在运行",DEV_NAME);
 		}
 		exit(EXIT_SUCCESS);
 	}else if(fl.l_type != F_UNLCK){	//该程序已经有进程在运行
-		LOG_INFO("%s 已经运行!(PID=%d)",DEMO_NAME , fl.l_pid);
+		LOG_INFO("%s 已经运行!(PID=%d)",DEV_NAME , fl.l_pid);
 		exit(EXIT_FAILURE);
 	}
 	fl.l_type = F_WRLCK ;
 	fl.l_pid = getpid () ;
 	if (fcntl(lockfd, F_SETLKW, &fl) < 0) {
-		perror("%s 加锁失败!" , DEMO_NAME);
+		perror("%s 加锁失败!" , DEV_NAME);
 		exit ( EXIT_FAILURE ) ;
 	}
 }
